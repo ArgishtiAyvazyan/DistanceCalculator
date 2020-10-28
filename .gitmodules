@@ -1,0 +1,3 @@
+[submodule "thirdparty/DBGH_ASSERTS"]
+	path = thirdparty/DBGH_ASSERTS
+	url = https://github.com/ArgishtyAyvazyan/DBGH_ASSERTS.git
