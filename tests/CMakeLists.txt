@@ -3,11 +3,14 @@ project(CSVParserTests)
 
 
 add_executable(CSVParserTests CSVParserTest.cc)
+add_executable(CSVParserBenchmark CSVParserBenchmark.cc)
+
 target_link_libraries(CSVParserTests PRIVATE Catch2 CSVParserLib)
+target_link_libraries(CSVParserBenchmark PRIVATE Catch2 CSVParserLib)
 
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # using GCC
-    target_link_libraries(CSVParserTests PRIVATE pthread)
+    target_link_libraries(CSVParserTests PRIVATE pthread tbb)
 endif()
 
 target_compile_features(CSVParserTests PUBLIC cxx_std_17)
