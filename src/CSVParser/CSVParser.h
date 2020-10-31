@@ -17,6 +17,7 @@
 
 #include "CSVRow.h"
 #include "CSVCell.h"
+#include "CSVUtils.h"
 
 namespace io
 {
