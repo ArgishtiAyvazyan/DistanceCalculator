@@ -5,7 +5,7 @@
  * @date        30-10-2020
  * @copyright   Copyright (c) 2020
  */
-#include <Assert.h>
+#include <DBGHAssert.h>
 
 #include "CSVRow.h"
 

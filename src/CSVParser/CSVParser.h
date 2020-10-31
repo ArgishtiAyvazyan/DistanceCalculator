@@ -13,7 +13,7 @@
 #include <vector>
 #include <memory>
 
-#include <Assert.h>
+#include <DBGHAssert.h>
 
 #include "CSVRow.h"
 #include "CSVCell.h"
