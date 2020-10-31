@@ -73,8 +73,8 @@ TRet CSVCell::get() const
     {
         std::istringstream iss { std::string { m_strCell.begin(), m_strCell.end() } };
         TRet value;
-        [[maybe_unused]] bool pass = iss >> value;
-        ASSERT_ERROR(pass, "Type mismatch, cannot convert.");
+        iss >> value;
+        ASSERT_ERROR(!iss.fail(), "Type mismatch, cannot convert.");
         return value;
     }
 }

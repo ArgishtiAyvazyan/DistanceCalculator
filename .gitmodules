@@ -1,3 +1,7 @@
 [submodule "thirdparty/DBGH_ASSERTS"]
 	path = thirdparty/DBGH_ASSERTS
 	url = https://github.com/ArgishtyAyvazyan/DBGH_ASSERTS.git
+[submodule "thirdparty/Catch2"]
+	path = thirdparty/Catch2
+	url = https://github.com/catchorg/Catch2.git
+	branch = v2.x

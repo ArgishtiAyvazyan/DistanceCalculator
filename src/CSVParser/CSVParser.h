@@ -105,6 +105,12 @@ public:
      */
     [[nodiscard]] auto crend() const noexcept { return std::crend(m_arrData); }
 
+
+    /**
+     * @brief Returns the count of row in the CSV file.
+     * @return std::size_t the number of rows.
+     */
+    std::size_t size() const noexcept;
 private:
 
     /**

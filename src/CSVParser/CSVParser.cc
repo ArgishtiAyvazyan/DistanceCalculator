@@ -13,27 +13,32 @@
 
 namespace io
 {
-    CSVParser::CSVParser(std::string strCSVFileName)
-        : m_strCSVFileName(std::move(strCSVFileName))
+CSVParser::CSVParser(std::string strCSVFileName)
+    : m_strCSVFileName(std::move(strCSVFileName))
+{
+    ASSERT_DEBUG(!m_strCSVFileName.empty(), "The CSV file name cannot be empty, please input valid filename.");
+
+    loadCSVFile();
+}
+
+std::size_t CSVParser::size() const noexcept
+{
+    return std::size(m_arrData);
+}
+
+
+void CSVParser::loadCSVFile()
+{
+    std::ifstream inputCSVFile{ m_strCSVFileName };
+    ASSERT_ERROR(inputCSVFile.is_open(), "CSV file not exists.");
+
+
+    std::string strRow;
+    while (std::getline(inputCSVFile, strRow))
     {
-        ASSERT_DEBUG(!m_strCSVFileName.empty(), "The CSV file name cannot be empty, please input valid filename.");
-
-        loadCSVFile();
+        m_arrData.emplace_back( std::move(strRow) );
+        strRow.clear();
     }
-
-    void CSVParser::loadCSVFile()
-    {
-        std::ifstream inputCSVFile{ m_strCSVFileName };
-        ASSERT_ERROR(inputCSVFile.is_open(), "CSV file not exists.");
-
-
-        std::string strRow;
-        while (std::getline(inputCSVFile, strRow))
-        {
-            m_arrData.emplace_back( std::move(strRow) );
-            strRow.clear();
-        }
-    }
-
+}
 
 } // namespace io
