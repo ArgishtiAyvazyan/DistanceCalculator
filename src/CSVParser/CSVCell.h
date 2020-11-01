@@ -1,7 +1,7 @@
 /**
- * @file        CSVCell.h
+ * @file        Cell.h
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Declaration for CSVCell.
+ * @brief       Declaration for Cell.
  * @date        30-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -10,27 +10,27 @@
 
 #include <string_view>
 
-namespace io
+namespace csv
 {
 
 /**
- * @class CSVCell
+ * @class Cell
  * @brief The C++ representation for CSV cell.
  */
-class CSVCell
+class Cell
 {
 public:
 
     /**
-     * @brief Construct and initialize CSVCell object.
+     * @brief Construct and initialize Cell object.
      * @param strCell The string_view to the string representation of CSV cell.
      */
-    explicit CSVCell(std::string_view strCell);
+    explicit Cell(std::string_view strCell);
 
     /**
      * @brief Gets the call value for the given type.
      *
-     * @example CSVCell cell = ...
+     * @example Cell cell = ...
      *          const auto value = cell.get<float>();
      *
      * @throws If dbgh::CAssertException If the value to TRet conversion fails.
@@ -43,21 +43,21 @@ public:
 
 private:
     std::string_view m_strCell;
-}; // class CSVCell
+}; // class Cell
 
 
-extern template short CSVCell::get<short>() const;
-extern template unsigned short CSVCell::get<unsigned short>() const;
-extern template int CSVCell::get<int>() const;
-extern template unsigned CSVCell::get<unsigned>() const;
-extern template long CSVCell::get<long>() const;
-extern template unsigned long CSVCell::get<unsigned long>() const;
-extern template long long CSVCell::get<long long>() const;
-extern template unsigned long long CSVCell::get<unsigned long long>() const;
-extern template float CSVCell::get<float>() const;
-extern template double CSVCell::get<double>() const;
-extern template long double CSVCell::get<long double>() const;
-extern template std::string CSVCell::get<std::string>() const;
-extern template std::string_view CSVCell::get<std::string_view>() const;
+extern template short Cell::get<short>() const;
+extern template unsigned short Cell::get<unsigned short>() const;
+extern template int Cell::get<int>() const;
+extern template unsigned Cell::get<unsigned>() const;
+extern template long Cell::get<long>() const;
+extern template unsigned long Cell::get<unsigned long>() const;
+extern template long long Cell::get<long long>() const;
+extern template unsigned long long Cell::get<unsigned long long>() const;
+extern template float Cell::get<float>() const;
+extern template double Cell::get<double>() const;
+extern template long double Cell::get<long double>() const;
+extern template std::string Cell::get<std::string>() const;
+extern template std::string_view Cell::get<std::string_view>() const;
 
-} // namespace io
+} // namespace csv

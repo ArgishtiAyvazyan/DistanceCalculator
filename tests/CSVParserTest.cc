@@ -1,7 +1,7 @@
 /**
  * @file        CSVParserTest.cc
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Tests implementation for CSVParser.
+ * @brief       Tests implementation for Parser.
  * @date        31-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -75,16 +75,16 @@ void readTestBody(const char delimiter = ',')
 
     const auto target = createCSVFile<value_type>(tmpFile, delimiter, rowCount, columnCount);
 
-    io::CSVParser parser (tmpFile.string());
+    csv::Parser parser (tmpFile.string());
 
     // Start testing.
-    const auto matrix = io::util::loadFlatCSV<value_type>(parser, io::util::Execution::Par);
+    const auto matrix = csv::util::loadFlatCSV<value_type>(parser, csv::util::Execution::Par);
 
     checkMatrix(matrix, target);
 }
 
 
-TEST_CASE( "Check CSVParser for float", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser for float", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -94,7 +94,7 @@ TEST_CASE( "Check CSVParser for float", "[CSVParser]" )
 
 }
 
-TEST_CASE( "Check CSVParser for double", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser for double", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -103,7 +103,7 @@ TEST_CASE( "Check CSVParser for double", "[CSVParser]" )
     readTestBody<double>('\t');
 }
 
-TEST_CASE( "Check CSVParser for int", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser for int", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -112,7 +112,7 @@ TEST_CASE( "Check CSVParser for int", "[CSVParser]" )
     readTestBody<int>('\t');
 }
 
-TEST_CASE( "Check CSVParser for size_t", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser for size_t", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -121,7 +121,7 @@ TEST_CASE( "Check CSVParser for size_t", "[CSVParser]" )
     readTestBody<size_t>('\t');
 }
 
-TEST_CASE( "Check CSVParser utils loadFlatCSV (Seq).", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser utils loadFlatCSV (Seq).", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -136,13 +136,13 @@ TEST_CASE( "Check CSVParser utils loadFlatCSV (Seq).", "[CSVParser]" )
 
     RAIIDeleter d { tmpFile };
 
-    io::CSVParser parser { tmpFile.string() };
+    csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = io::util::loadFlatCSV<value_type> (parser, io::util::Execution::Seq);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Seq);;
     checkMatrix(matrix, target);
 }
 
-TEST_CASE( "Check CSVParser utils loadFlatCSV (Par).", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser utils loadFlatCSV (Par).", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -157,13 +157,13 @@ TEST_CASE( "Check CSVParser utils loadFlatCSV (Par).", "[CSVParser]" )
 
     RAIIDeleter d { tmpFile };
 
-    io::CSVParser parser { tmpFile.string() };
+    csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = io::util::loadFlatCSV<value_type> (parser, io::util::Execution::Par);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par);;
     checkMatrix(matrix, target);
 }
 
-TEST_CASE( "Check CSVParser utils loadFlatCSV (Par2).", "[CSVParser]" )
+TEST_CASE( "Check csv::Parser utils loadFlatCSV (Par2).", "[Parser]" )
 {
     dbgh::CAssertConfig::Get().EnableAsserts(dbgh::EAssertLevel::Fatal);
 
@@ -178,8 +178,8 @@ TEST_CASE( "Check CSVParser utils loadFlatCSV (Par2).", "[CSVParser]" )
 
     RAIIDeleter d { tmpFile };
 
-    io::CSVParser parser { tmpFile.string() };
+    csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = io::util::loadFlatCSV<value_type> (parser, io::util::Execution::Par2);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par2);;
     checkMatrix(matrix, target);
 }

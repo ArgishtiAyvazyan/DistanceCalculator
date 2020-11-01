@@ -1,7 +1,7 @@
 /**
- * @file        CSVParser.h
+ * @file        Parser.h
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Declaration for CSVParser.
+ * @brief       Declaration for Parser.
  * @date        30-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -19,20 +19,20 @@
 #include "CSVCell.h"
 #include "CSVUtils.h"
 
-namespace io
+namespace csv
 {
 
 /**
- * @class CSVParser
+ * @class Parser
  * @brief The class for providing CSV file reading.
  *
  * @details After object initialization loads all data of the CSV file in virtual memory.
  *          After that, it is possible to read data.
  *          The class is Movable but not copyable.
  */
-class CSVParser
+class Parser
 {
-    using TRowVector = std::vector<CSVRow>;
+    using TRowVector = std::vector<Row>;
 public:
 
     using iterator = TRowVector::iterator;
@@ -40,19 +40,19 @@ public:
     using reverse_iterator = TRowVector::reverse_iterator;
     using const_reverse_iterator = TRowVector::const_reverse_iterator;
 
-    CSVParser() = delete;
-    CSVParser(const CSVParser&) = delete;
-    CSVParser& operator=(const CSVParser&) = delete;
+    Parser() = delete;
+    Parser(const Parser&) = delete;
+    Parser& operator=(const Parser&) = delete;
 
-    CSVParser(CSVParser&&) = default;
-    CSVParser& operator=(CSVParser&&) = default;
-    ~CSVParser() = default;
+    Parser(Parser&&) = default;
+    Parser& operator=(Parser&&) = default;
+    ~Parser() = default;
 
     /**
-     * @brief Contracts and initialized CSVParser object.
+     * @brief Contracts and initialized Parser object.
      * @param strCSVFileName The CSV file name.
      */
-    explicit CSVParser(std::string strCSVFileName);
+    explicit Parser(std::string strCSVFileName);
 
     /**
      * @brief Returns the iterator to the memory representation of the first line of the CSV file.
@@ -134,7 +134,7 @@ private:
      */
     TRowVector m_arrData;
 
-}; // class CSVParser
+}; // class Parser
 
 
-} // namespace io
+} // namespace csv

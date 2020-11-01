@@ -1,7 +1,7 @@
 /**
  * @file        CSVUtils.h
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Declaration the utilities for CSVParser.
+ * @brief       Declaration the utilities for Parser.
  * @date        31-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -10,13 +10,13 @@
 
 #include <vector>
 
-namespace io
+namespace csv
 {
-class CSVParser;
-} // namespace io
+class Parser;
+} // namespace csv
 
 
-namespace io::util
+namespace csv::util
 {
 
 template <typename T>
@@ -52,6 +52,6 @@ enum class Execution
  * @return  The table contains the CSV file data.
  */
 template <typename T>
-Table<T> loadFlatCSV(const io::CSVParser& parser, io::util::Execution exec);
+Table<T> loadFlatCSV(const csv::Parser& parser, csv::util::Execution exec);
 
-} // namespace io::util
+} // namespace csv::util

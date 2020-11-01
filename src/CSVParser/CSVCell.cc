@@ -1,7 +1,7 @@
 /**
- * @file        CSVCell.cc
+ * @file        Cell.cc
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Implementation for CSVCell.
+ * @brief       Implementation for Cell.
  * @date        30-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -44,15 +44,15 @@ constexpr bool ExistsFromChars_v = ExistsFromChars<T>::value;
 } // unnamed namespace
 
 
-namespace io
+namespace csv
 {
 
 
-CSVCell::CSVCell(std::string_view strCell)
+Cell::Cell(std::string_view strCell)
         : m_strCell(strCell) { }
 
 template<typename TRet>
-TRet CSVCell::get() const
+TRet Cell::get() const
 {
     if constexpr (std::is_same_v<TRet, std::string>)
     {
@@ -79,17 +79,17 @@ TRet CSVCell::get() const
     }
 }
 
-template short CSVCell::get<short>() const;
-template unsigned short CSVCell::get<unsigned short>() const;
-template int CSVCell::get<int>() const;
-template unsigned CSVCell::get<unsigned>() const;
-template long CSVCell::get<long>() const;
-template unsigned long CSVCell::get<unsigned long>() const;
-template long long CSVCell::get<long long>() const;
-template unsigned long long CSVCell::get<unsigned long long>() const;
-template float CSVCell::get<float>() const;
-template double CSVCell::get<double>() const;
-template long double CSVCell::get<long double>() const;
-template std::string CSVCell::get<std::string>() const;
-template std::string_view CSVCell::get<std::string_view>() const;
-} // namespace io
+template short Cell::get<short>() const;
+template unsigned short Cell::get<unsigned short>() const;
+template int Cell::get<int>() const;
+template unsigned Cell::get<unsigned>() const;
+template long Cell::get<long>() const;
+template unsigned long Cell::get<unsigned long>() const;
+template long long Cell::get<long long>() const;
+template unsigned long long Cell::get<unsigned long long>() const;
+template float Cell::get<float>() const;
+template double Cell::get<double>() const;
+template long double Cell::get<long double>() const;
+template std::string Cell::get<std::string>() const;
+template std::string_view Cell::get<std::string_view>() const;
+} // namespace csv

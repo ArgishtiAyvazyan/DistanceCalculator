@@ -1,7 +1,7 @@
 /**
  * @file        CSVParserTestUtil.h
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Declaration the utilities for CSVParser testing.
+ * @brief       Declaration the utilities for csv::Parser testing.
  * @date        31-10-2020
  * @copyright   Copyright (c) 2020
  */

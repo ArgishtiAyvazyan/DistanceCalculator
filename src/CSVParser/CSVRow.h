@@ -1,7 +1,7 @@
 /**
- * @file        CSVRow.h
+ * @file        Row.h
  * @author      Argishti Ayvazyan (ayvazyan.argishti@gmail.com)
- * @brief       Declaration for CSVRow.
+ * @brief       Declaration for Row.
  * @date        30-10-2020
  * @copyright   Copyright (c) 2020
  */
@@ -12,14 +12,14 @@
 
 #include "CSVCell.h"
 
-namespace io
+namespace csv
 {
 
 /**
- * @class CSVRow
+ * @class Row
  * @brief The C++ representation for CSV row.
  */
-class CSVRow
+class Row
 {
 public:
 
@@ -31,7 +31,7 @@ public:
      */
     class const_iterator
     {
-        friend class CSVRow;
+        friend class Row;
 
         /**
          * @internal
@@ -63,7 +63,7 @@ public:
 
         bool operator!=(const const_iterator& other) const noexcept;
 
-        CSVCell operator*() const;
+        Cell operator*() const;
 
     private:
 
@@ -84,10 +84,10 @@ public:
 public:
 
     /**
-     * @brief Contracts and initialized CSVRow object.
+     * @brief Contracts and initialized Row object.
      * @param strRow The string representation of CSV row.
      */
-    explicit CSVRow(std::string strRow);
+    explicit Row(std::string strRow);
 
     /**
      * @brief Gets the string representation of the CSV row.
@@ -97,32 +97,32 @@ public:
 
     /**
      * @brief Returns the iterator to the memory representation of the first cell of the CSV file row.
-     * @return The CSVRow::const_iterator.
+     * @return The Row::const_iterator.
      */
     [[nodiscard]] const_iterator begin() const noexcept;
 
 
     /**
       * @brief Returns the iterator to the memory representation of the past-the-end cell of the CSV file row.
-      * @return The CSVRow::const_iterator.
+      * @return The Row::const_iterator.
       */
     [[nodiscard]] const_iterator end() const noexcept;
 
     /**
      * @brief Returns the iterator to the memory representation of the first cell of the CSV file row.
-     * @return The CSVRow::const_iterator.
+     * @return The Row::const_iterator.
      */
     [[nodiscard]] auto cbegin() const noexcept;
 
 
     /**
       * @brief Returns the iterator to the memory representation of the past-the-end cell of the CSV file row.
-      * @return The CSVRow::const_iterator.
+      * @return The Row::const_iterator.
       */
     [[nodiscard]] auto cend() const noexcept;
 
 
 private:
     std::shared_ptr<std::string> m_pRowString;
-}; // class CSVRow
-} // namespace io
+}; // class Row
+} // namespace csv
