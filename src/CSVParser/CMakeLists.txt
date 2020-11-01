@@ -18,5 +18,3 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # using GCC
     target_link_libraries(CSVParserLib PRIVATE pthread tbb)
 endif()
-
-target_compile_features(CSVParserLib PUBLIC cxx_std_20)
