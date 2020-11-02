@@ -8,9 +8,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <random>
 #include <thread>
-#include <execution>
 
 #include <DBGHAssert.h>
 
@@ -19,6 +17,7 @@
 
 #include "DistanceCalculator.h"
 #include "MathKernel.h"
+#include "MTMathKernel.h"
 
 #include "MathEngineTestUtil.h"
 
@@ -129,3 +128,46 @@ TEST_CASE( "Check MathEngine, Distance equal vectors. (Hamming)", "[MathEngine]"
     checkDistanceBetweenEqualVectors<int>(math::EDistanceMetric::Hamming);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MTMathKernel tests.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+void compareMathKernelMTMathKernel(math::EDistanceMetric metric)
+{
+    using value_type = T;
+    using Matrix = typename math::IMathKernel<value_type>::Matrix;
+
+    const auto query = crateTestQuery<value_type>(128);
+    const auto dataSet = crateTestQuery<value_type>(128);
+
+    math::DistanceCalculator<value_type> sequentialCalculator { std::make_unique<math::MathKernel<value_type>>() };
+    math::DistanceCalculator<value_type> parallelCalculator { std::make_unique<math::MTMathKernel<value_type>>() };
+
+
+    Matrix seResult = sequentialCalculator.computeDistance(query, dataSet, metric);
+    Matrix mtResult = parallelCalculator.computeDistance(query, dataSet, metric);
+
+    REQUIRE(seResult == mtResult);
+}
+
+TEST_CASE( "Check MTMathEngine, Compare MathKernel and MTMathKernel results. (L1)", "[MathEngine]" )
+{
+    compareMathKernelMTMathKernel<int>(math::EDistanceMetric::L1);
+    compareMathKernelMTMathKernel<float>(math::EDistanceMetric::L1);
+    compareMathKernelMTMathKernel<double>(math::EDistanceMetric::L1);
+}
+
+TEST_CASE( "Check MTMathEngine, Compare MathKernel and MTMathKernel results. (L2)", "[MathEngine]" )
+{
+    compareMathKernelMTMathKernel<int>(math::EDistanceMetric::L2);
+    compareMathKernelMTMathKernel<float>(math::EDistanceMetric::L2);
+    compareMathKernelMTMathKernel<double>(math::EDistanceMetric::L2);
+}
+
+TEST_CASE( "Check MTMathEngine, Compare MathKernel and MTMathKernel results. (Hamming)", "[MathEngine]" )
+{
+    compareMathKernelMTMathKernel<int>(math::EDistanceMetric::Hamming);
+    compareMathKernelMTMathKernel<float>(math::EDistanceMetric::Hamming);
+    compareMathKernelMTMathKernel<double>(math::EDistanceMetric::Hamming);
+}

@@ -5,11 +5,12 @@ project(CSVParserTests)
 add_executable(CSVParserTests CSVParserTest.cc)
 add_executable(CSVParserBenchmark CSVParserBenchmark.cc)
 add_executable(MathEngineTests MathEngineTest.cc)
-
+add_executable(MathEngineBenchmark MathEngineBenchmark.cc)
 
 target_link_libraries(CSVParserTests PRIVATE Catch2 CSVParserLib)
 target_link_libraries(CSVParserBenchmark PRIVATE Catch2 CSVParserLib)
 target_link_libraries(MathEngineTests PRIVATE Catch2 MathEngineLib)
+target_link_libraries(MathEngineBenchmark PRIVATE Catch2 MathEngineLib)
 
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # using GCC
