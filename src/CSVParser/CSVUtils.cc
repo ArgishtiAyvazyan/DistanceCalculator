@@ -67,8 +67,8 @@ auto readCSV_MT (const csv::Parser& parser) -> csv::util::Table<T>
     std::for_each(std::execution::par, std::begin(parser), std::end(parser)
                   , [&](const csv::Row& row)
             {
-                const std::size_t index = (&row - &*std::begin(parser));
-                for (const auto& cell : row)
+                const auto index =  static_cast<std::size_t>(&row - &*std::begin(parser));
+                for (const auto cell : row)
                 {
                     table[index].push_back(cell.get<value_type>());
                 }
@@ -92,10 +92,11 @@ auto readCSV_MT2 (const csv::Parser& parser) -> csv::util::Table<T>
 
     const auto length = std::size(parser);
 
-    const uint32_t min_per_thread = 25;
-    const uint32_t max_threads = ( length + min_per_thread - 1 ) / min_per_thread;
-    const uint32_t hardware_threads = std::thread::hardware_concurrency();
-    const uint32_t num_threads = std::min( hardware_threads != 0 ? hardware_threads : 2, max_threads );
+    const auto min_per_thread = 25;
+    const auto max_threads = ( length + min_per_thread - 1 ) / min_per_thread;
+    const auto hardware_threads = std::thread::hardware_concurrency();
+    const auto num_threads = std::min( static_cast<size_t>(hardware_threads != 0 ? hardware_threads : 2)
+            , max_threads );
     const auto block_size = length / num_threads;
 
     csv::util::Table<value_type> table (length);
@@ -107,11 +108,11 @@ auto readCSV_MT2 (const csv::Parser& parser) -> csv::util::Table<T>
             csv::Parser::const_iterator first,
             csv::Parser::const_iterator last)
     {
-        auto rowIndex = std::distance (std::begin (parser), first);
+        auto rowIndex = static_cast<std::size_t>(first - std::begin (parser));
         for (auto it = first; it != last; ++it)
         {
             const csv::Row& row = *it;
-            for (const csv::Cell& cell : row)
+            for (const csv::Cell cell : row)
             {
                 table[rowIndex].push_back(cell.get<value_type>());
             }

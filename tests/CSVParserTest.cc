@@ -26,9 +26,6 @@
 template <typename T>
 void checkMatrix(const std::vector<std::vector<T>>& matrix, const std::vector<std::vector<T>>& target)
 {
-    // TODO investigate big error reason.
-    static constexpr double allowedError = 1.0f;
-
     using value_type = T;
     REQUIRE(matrix.size() == target.size());
     const auto rowCount = std::size(matrix);
@@ -45,7 +42,7 @@ void checkMatrix(const std::vector<std::vector<T>>& matrix, const std::vector<st
         {
             if constexpr (std::is_floating_point_v<value_type>)
             {
-                REQUIRE(std::abs(matrix[row][col] - target[row][col]) < allowedError);
+                REQUIRE(matrix[row][col] == Approx(target[row][col]));
             }
             else
             {
@@ -138,7 +135,7 @@ TEST_CASE( "Check csv::Parser utils loadFlatCSV (Seq).", "[Parser]" )
 
     csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Seq);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Seq);
     checkMatrix(matrix, target);
 }
 
@@ -159,7 +156,7 @@ TEST_CASE( "Check csv::Parser utils loadFlatCSV (Par).", "[Parser]" )
 
     csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par);
     checkMatrix(matrix, target);
 }
 
@@ -180,6 +177,6 @@ TEST_CASE( "Check csv::Parser utils loadFlatCSV (Par2).", "[Parser]" )
 
     csv::Parser parser { tmpFile.string() };
 
-    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par2);;
+    const auto matrix = csv::util::loadFlatCSV<value_type> (parser, csv::util::Execution::Par2);
     checkMatrix(matrix, target);
 }

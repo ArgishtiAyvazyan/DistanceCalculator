@@ -54,4 +54,19 @@ enum class Execution
 template <typename T>
 Table<T> loadFlatCSV(const csv::Parser& parser, csv::util::Execution exec);
 
+
+extern template Table<short> loadFlatCSV<short>(const csv::Parser&, const Execution);
+extern template Table<unsigned short> loadFlatCSV<unsigned short>(const csv::Parser&, const Execution);
+extern template Table<int> loadFlatCSV<int>(const csv::Parser&, const Execution);
+extern template Table<unsigned> loadFlatCSV<unsigned>(const csv::Parser&, const Execution);
+extern template Table<long> loadFlatCSV<long>(const csv::Parser&, const Execution);
+extern template Table<unsigned long> loadFlatCSV<unsigned long>(const csv::Parser&, const Execution);
+extern template Table<long long> loadFlatCSV<long long>(const csv::Parser&, const Execution);
+extern template Table<unsigned long long> loadFlatCSV<unsigned long long>(const csv::Parser&, const Execution);
+extern template Table<float> loadFlatCSV<float>(const csv::Parser&, const Execution);
+extern template Table<double> loadFlatCSV<double>(const csv::Parser&, const Execution);
+extern template Table<long double> loadFlatCSV<long double>(const csv::Parser&, const Execution);
+extern template Table<std::string> loadFlatCSV<std::string>(const csv::Parser&, const Execution);
+extern template Table<std::string_view> loadFlatCSV<std::string_view>(const csv::Parser&, const Execution);
+
 } // namespace csv::util

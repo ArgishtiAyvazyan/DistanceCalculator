@@ -33,9 +33,9 @@ public:
      * @example Cell cell = ...
      *          const auto value = cell.get<float>();
      *
-     * @throws If dbgh::CAssertException If the value to TRet conversion fails.
+     * @throw If dbgh::CAssertException If the value to TRet conversion fails.
      *
-     * @tparam TRet The The value type, available all C++ fundamental types, std::string and std::string_view.
+     * @tparam TRet The value type, available all C++ fundamental types, std::string and std::string_view.
      * @return Returns the cell value.
      */
     template<typename TRet>

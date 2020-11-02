@@ -63,7 +63,7 @@ T computeL2Distance(
     for (std::size_t vecIdx = 0; vecIdx < vectorSize; ++vecIdx)
     {
         const auto diff = (first[vecIdx] - second[vecIdx]);
-        distance += diff * diff;
+        distance += static_cast<long double>(diff * diff);
     }
     return static_cast<T>(std::sqrt(distance));
 }
@@ -87,9 +87,20 @@ T computeHammingDistance(
     T distance = 0;
     for (std::size_t vecIdx = 0; vecIdx < vectorSize; ++vecIdx)
     {
-        if (first[vecIdx] != second[vecIdx])
+        if constexpr (std::is_floating_point_v<T>)
         {
-            ++distance;
+            static constexpr T allowedError = .000001f;
+            if (std::fabs(first[vecIdx] - second[vecIdx]) > allowedError)
+            {
+                ++distance;
+            }
+        }
+        else
+        {
+            if (first[vecIdx] != second[vecIdx])
+            {
+                ++distance;
+            }
         }
     }
     return distance;

@@ -77,6 +77,8 @@ auto MathKernel<T>::computeDistance(MatrixView query, MatrixView dataSet, EDista
             return computeDistance_L2(query, dataSet);
         case EDistanceMetric::Hamming:
             return computeDistance_Hamming(query, dataSet);
+        default:
+            break;
     }
     ASSERT_FATAL(false, "Unexpected metric type.");
     return { };
