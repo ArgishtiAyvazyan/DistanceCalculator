@@ -89,7 +89,7 @@ T computeHammingDistance(
     {
         if constexpr (std::is_floating_point_v<T>)
         {
-            static constexpr T allowedError = .000001f;
+            static constexpr auto allowedError = static_cast<T>(.000001L);
             if (std::fabs(first[vecIdx] - second[vecIdx]) > allowedError)
             {
                 ++distance;
