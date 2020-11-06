@@ -1,6 +1,6 @@
 project(DistanceCalculator)
 
-set(PROJECT_SOURCES CLIParser.cc)
+set(PROJECT_SOURCES CLIParser.cc Msg.cpp)
 
 add_library(InputOutputLib STATIC ${PROJECT_SOURCES})
 target_include_directories(InputOutputLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
