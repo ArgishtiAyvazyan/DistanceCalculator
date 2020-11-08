@@ -5,6 +5,12 @@ project(DistanceCalculator)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
+option(BUILD_UNIT_TESTS "Build unit tests." NO)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/bin/libs)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/bin/libs)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/bin)
+
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # using Clang
     add_compile_options(
@@ -127,6 +133,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             -Wunused-value -Wunused-variable -Wvolatile-register-var -Wwrite-strings
     )
 
+    set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
+    set(CMAKE_CXX_FLAGS_RELEASE_INIT "-o3")
+
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # using GCC
     # lots of warnings and all warnings as errors
@@ -139,6 +148,9 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             -Wswitch-enum -Wtautological-compare -Wtrigraphs -Wuninitialized -Wunknown-pragmas -Wunreachable-code -Wunused-function -Wunused-label -Wunused-value -Wunused-variable
             -Wvolatile-register-var -Wwrite-strings
     )
+
+    set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
+    set(CMAKE_CXX_FLAGS_RELEASE_INIT "-o3")
 
 elseif ("CMAKE_CXX_COMPILER_ID" STREQUAL "MSVC")
     # using Visual Studio C++
@@ -160,5 +172,7 @@ add_subdirectory ("thirdparty/DBGH_ASSERTS")
 # Tests sources.
 ########################################################################################################################
 
-add_subdirectory ("tests")
-add_subdirectory ("thirdparty/Catch2")
+IF (BUILD_UNIT_TESTS)
+    add_subdirectory ("tests")
+    add_subdirectory ("thirdparty/Catch2")
+ENDIF()
