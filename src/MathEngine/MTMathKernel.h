@@ -115,13 +115,23 @@ auto MTMathKernel<T>::computeDistance(MatrixView query, MatrixView dataSet, Fn&&
     const auto dataSetSize = std::size(dataSet);
     auto result = IMathKernel<T>::createMatrix(querySize, dataSetSize);
 
+    bool dimensionalError = false;
     auto handleQueryVector = [&](const auto& queryVec)
     {
+        if (dimensionalError)
+        {
+            // Skip computing.
+            return;
+        }
+
         const auto queryIdx = static_cast<std::size_t>(&queryVec - &*std::begin(query));
         for (std::size_t dataSetIdx = 0; dataSetIdx < dataSetSize; ++dataSetIdx)
         {
-            ASSERT_ERROR(std::size(queryVec) == std::size(dataSet[dataSetIdx])
-                         , "The vector sizes is not equal, distance computation is impossible.");
+            if (std::size(queryVec) != std::size(dataSet[dataSetIdx]))
+            {
+                dimensionalError = true;
+                return;
+            }
 
             const auto& dataSetVec = dataSet[dataSetIdx];
             result[queryIdx][dataSetIdx] = distance(queryVec, dataSetVec);
@@ -130,6 +140,7 @@ auto MTMathKernel<T>::computeDistance(MatrixView query, MatrixView dataSet, Fn&&
 
     std::for_each(std::execution::par, std::begin(query), std::end(query), handleQueryVector);
 
+    ASSERT_ERROR(!dimensionalError, "The vector sizes is not equal, distance computation is impossible.");
     return result;
 }
 
