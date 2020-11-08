@@ -37,7 +37,10 @@ void io::cli::Parser::addOption(
         const TValueRef& valueRef,
         TValue defaultValue, std::string description)
 {
-    ASSERT_ERROR(((requireIndex == defaultValue.index()) || (valueRef.index() == defaultValue.index()))
+    ASSERT_ERROR(((callBackIndex == valueRef.index())
+                            || (callBackWithArgumentIndex == valueRef.index())
+                            || (requireIndex == defaultValue.index())
+                            || (valueRef.index() == defaultValue.index()))
                  , "The value type is not equal to the default value type.");
     std::optional<TValue> defValue = std::nullopt;
     if (requireIndex != defaultValue.index())

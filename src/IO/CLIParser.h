@@ -58,6 +58,8 @@ class Parser
     using TValue = std::variant<std::string, bool, int, double, const impl::required_t>;
 
     static constexpr int32_t requireIndex = 4;
+    static constexpr int32_t callBackIndex = 4;
+    static constexpr int32_t callBackWithArgumentIndex = 5;
 
     /**
      * @internal

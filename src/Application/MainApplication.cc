@@ -17,6 +17,8 @@
 #include "CLIParser.h"
 #include "Msg.h"
 
+#include "Task.h"
+
 #include "CSVParser.h"
 #include "CSVUtils.h"
 
@@ -64,6 +66,8 @@ int MainApplication::run()
 {
     try
     {
+        START_TASK("Distance calculator");
+
         if (!parseAndInitParameters(m_argc, m_argv))
         {
             return 0; // Called help.
@@ -115,6 +119,11 @@ bool MainApplication::parseAndInitParameters(int argc, char** argv)
 
     parser.addOption("-dbg", m_dbg, false
                      , "Run application in debug mode.");
+
+    parser.addOption("-dumpTimeLog", []()
+    {
+        task::TaskManager::get().enableLogging(true);
+    }, false, "Dump the tasks execution times into the time.log file.");
 
     const auto parsedHelp = !parser.parse();
     if (parsedHelp)
@@ -188,7 +197,7 @@ auto MainApplication::createDistanceCalculator() const -> math::DistanceCalculat
 
 auto MainApplication::loadCSVFiles() const -> std::pair<csv::util::Table<TValueType>, csv::util::Table<TValueType>>
 {
-    io::Msg::Write("CSV files loading."sv);
+    START_TASK("CSV files loading");
 
     auto load = [this](const std::string& path) -> csv::util::Table<TValueType>
     {
@@ -243,7 +252,7 @@ auto MainApplication::computeDistances(
         const csv::util::Table<MainApplication::TValueType>& dataSet
         ) -> csv::util::Table<MainApplication::TValueType>
 {
-    io::Msg::Write("Compute distances."sv);
+    START_TASK("Compute distances");
     auto distanceCalculator = createDistanceCalculator();
     const auto metric = metricToEnum(m_strMetric);
     return distanceCalculator.computeDistance(query, dataSet, metric);
@@ -268,7 +277,7 @@ void MainApplication::displayResult(const csv::util::Table<MainApplication::TVal
 
 void MainApplication::writeCSV(const csv::util::Table<MainApplication::TValueType>& table)
 {
-    io::Msg::Write("Write distance matrix in out file.");
+    START_TASK("Write distance matrix in out file");
     ASSERT_ERROR(!m_outFile.empty(), "The output file path is empty.");
     io::Msg::Write("The output file: "s + m_outFile.string());
 
