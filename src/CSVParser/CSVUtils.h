@@ -69,4 +69,28 @@ extern template Table<long double> loadFlatCSV<long double>(const csv::Parser&, 
 extern template Table<std::string> loadFlatCSV<std::string>(const csv::Parser&, const Execution);
 extern template Table<std::string_view> loadFlatCSV<std::string_view>(const csv::Parser&, const Execution);
 
+
+/**
+ * @brief               Generates the random CSV Table.
+ *
+ * @tparam T            The cell type.
+ * @param rowCount      The count of row.
+ * @param columnCount   The count of column.
+ * @return              The generated table.
+ */
+template <typename T>
+Table<T> generateRandomTable(size_t rowCount, size_t columnCount);
+
+extern template Table<short> generateRandomTable<short>(size_t, size_t);
+extern template Table<unsigned short> generateRandomTable<unsigned short>(size_t, size_t);
+extern template Table<int> generateRandomTable<int>(size_t, size_t);
+extern template Table<unsigned> generateRandomTable<unsigned>(size_t, size_t);
+extern template Table<long> generateRandomTable<long>(size_t, size_t);
+extern template Table<unsigned long> generateRandomTable<unsigned long>(size_t, size_t);
+extern template Table<long long> generateRandomTable<long long>(size_t, size_t);
+extern template Table<unsigned long long> generateRandomTable<unsigned long long>(size_t, size_t);
+extern template Table<float> generateRandomTable<float>(size_t, size_t);
+extern template Table<double> generateRandomTable<double>(size_t, size_t);
+extern template Table<long double> generateRandomTable<long double>(size_t, size_t);
+
 } // namespace csv::util

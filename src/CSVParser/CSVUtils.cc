@@ -16,6 +16,7 @@
 
 #include "CSVUtils.h"
 #include "CSVParser.h"
+#include <random>
 
 namespace
 {
@@ -158,6 +159,7 @@ template <typename T>
     return { };
 }
 
+
 template Table<short> loadFlatCSV<short>(const csv::Parser&, const Execution);
 template Table<unsigned short> loadFlatCSV<unsigned short>(const csv::Parser&, const Execution);
 template Table<int> loadFlatCSV<int>(const csv::Parser&, const Execution);
@@ -171,5 +173,47 @@ template Table<double> loadFlatCSV<double>(const csv::Parser&, const Execution);
 template Table<long double> loadFlatCSV<long double>(const csv::Parser&, const Execution);
 template Table<std::string> loadFlatCSV<std::string>(const csv::Parser&, const Execution);
 template Table<std::string_view> loadFlatCSV<std::string_view>(const csv::Parser&, const Execution);
+
+template<typename T>
+Table<T> generateRandomTable(size_t rowCount, size_t columnCount)
+{
+    Table<T>  csvTable (rowCount, typename Table<T>::value_type (columnCount));
+
+    std::default_random_engine re;
+    for (auto& arrRow : csvTable)
+    {
+        for (auto& cell : arrRow)
+        {
+            if constexpr (std::is_floating_point_v<T>)
+            {
+                constexpr T lower_bound = -1'000'000;
+                constexpr T upper_bound = 1'000'000;
+                std::uniform_real_distribution<T> unif { lower_bound, upper_bound };
+                cell = unif(re);
+            }
+            else
+            {
+                static constexpr auto lower_bound = std::numeric_limits<T>::min();
+                static constexpr auto upper_bound = std::numeric_limits<T>::max();
+                std::uniform_int_distribution<T> unif { lower_bound, upper_bound };
+                cell = unif(re);
+            }
+        }
+    }
+
+    return csvTable;
+}
+
+template Table<short> generateRandomTable<short>(size_t, size_t);
+template Table<unsigned short> generateRandomTable<unsigned short>(size_t, size_t);
+template Table<int> generateRandomTable<int>(size_t, size_t);
+template Table<unsigned> generateRandomTable<unsigned>(size_t, size_t);
+template Table<long> generateRandomTable<long>(size_t, size_t);
+template Table<unsigned long> generateRandomTable<unsigned long>(size_t, size_t);
+template Table<long long> generateRandomTable<long long>(size_t, size_t);
+template Table<unsigned long long> generateRandomTable<unsigned long long>(size_t, size_t);
+template Table<float> generateRandomTable<float>(size_t, size_t);
+template Table<double> generateRandomTable<double>(size_t, size_t);
+template Table<long double> generateRandomTable<long double>(size_t, size_t);
 
 } // namespace csv

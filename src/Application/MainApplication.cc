@@ -130,13 +130,17 @@ bool MainApplication::parseAndInitParameters(int argc, char** argv)
     {
         return false;
     }
-    m_queryCSVFile = std::filesystem::absolute(queryFilePath).lexically_normal();
-    m_dataSetCSVFile = std::filesystem::absolute(dataSetFilePath).lexically_normal();
-    if (!outFilePath.empty())
-    {
-        m_outFile = std::filesystem::absolute(outFilePath).lexically_normal();
-    }
 
+    auto initIfNotEmpty = [](std::filesystem::path& path, const std::string& strPath) {
+        if (!strPath.empty())
+        {
+            path = std::filesystem::absolute(strPath).lexically_normal();
+        }
+    };
+
+    initIfNotEmpty(m_queryCSVFile, queryFilePath);
+    initIfNotEmpty(m_dataSetCSVFile, dataSetFilePath);
+    initIfNotEmpty(m_outFile, outFilePath);
 
     return true;
 }
@@ -150,6 +154,10 @@ void MainApplication::checkArguments() const
 
     ASSERT_ERROR(m_dataSetCSVFile.empty() || std::filesystem::exists(m_dataSetCSVFile)
         ,("The data set file not exists. Path: "s + m_dataSetCSVFile.string()).c_str());
+
+    ASSERT_ERROR((m_queryCSVFile.empty() && m_dataSetCSVFile.empty())
+                || (!m_queryCSVFile.empty() && !m_dataSetCSVFile.empty()),
+                "Only one set cannot generate automatically.");
 
     ASSERT_ERROR(m_outFile.empty() || !std::filesystem::exists(m_outFile)
                  , ("The output file already exists. File path: "s + m_outFile.string()).c_str());
@@ -169,10 +177,16 @@ void MainApplication::showSummary() const
         io::Msg::Write("Running in debug mode.", io::MsgType::Warning);
     }
 
+    auto pathOrMassage = [](const std::filesystem::path& path) {
+        return (!path.empty())
+            ? path.string()
+            : "File path is empty, the set will be generated randomly."s;
+    };
+
     std::stringstream ss;
     ss << std::endl;
-    ss << "The query path:       " << m_queryCSVFile << std::endl;
-    ss << "The data set path:    " << m_dataSetCSVFile << std::endl;
+    ss << "The query path:       " << pathOrMassage(m_queryCSVFile) << std::endl;
+    ss << "The data set path:    " << pathOrMassage(m_dataSetCSVFile) << std::endl;
     ss << "The output path:      " << m_outFile << std::endl;
     ss << "The math metric type: " << m_strMetric << std::endl;
     ss << "Execute parallel:     " << std::boolalpha << m_executeParallel << std::endl;
@@ -201,6 +215,11 @@ auto MainApplication::loadCSVFiles() const -> std::pair<csv::util::Table<TValueT
 
     auto load = [this](const std::string& path) -> csv::util::Table<TValueType>
     {
+        if (path.empty())
+        {
+            return csv::util::generateRandomTable<TValueType>(1024, 1024);
+        }
+
         csv::Parser Parser { path };
         const auto policy = m_executeParallel ? csv::util::Execution::Par
                 : csv::util::Execution::Seq;

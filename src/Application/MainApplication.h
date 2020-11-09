@@ -84,9 +84,10 @@ private:
     [[nodiscard]] auto createDistanceCalculator() const -> math::DistanceCalculator<TValueType>;
 
     /**
-     * @brief   Loads queryset and data sets.
+     * @brief   Loads query set and data set.
      *
      * @details Depend on command line options executed parallel or sequential.
+     *          If the file path is empty the set generated randomly.
      *
      * @throw   \ref dbgh::CAssertException if the CSV file contains invalid value.
      *
