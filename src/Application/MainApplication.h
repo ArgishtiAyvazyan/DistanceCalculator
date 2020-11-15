@@ -12,7 +12,7 @@
 
 #include "DistanceCalculator.h"
 #include "CSVUtils.h"
-
+#include "MPIWrapper.h"
 
 namespace dc
 {
@@ -170,6 +170,11 @@ private:
      * @brief The name of math metric.
      */
     std::string m_strMetric;
+
+    /**
+     * @brief Pointer to the MPI wrapper.
+     */
+     std::unique_ptr<mpi::MPIWrapper> m_pMPIWrapper;
 };
 
 

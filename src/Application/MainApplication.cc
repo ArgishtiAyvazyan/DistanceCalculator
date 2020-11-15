@@ -59,8 +59,14 @@ MainApplication::MainApplication(int argc, char** argv) noexcept
     : m_argc(argc),
     m_argv(argv),
     m_dbg(false),
-    m_executeParallel(false)
-{ }
+    m_executeParallel(false),
+    m_pMPIWrapper(std::make_unique<mpi::MPIWrapper>(&argc, &argv))
+{
+    if (!m_pMPIWrapper->isMain())
+    {
+        io::Msg::DisableMessages(true);
+    }
+}
 
 int MainApplication::run()
 {
@@ -76,15 +82,34 @@ int MainApplication::run()
         checkArguments();
         showSummary();
 
-        const auto [querySet, dataSet] = loadCSVFiles();
-        auto distancesMatrix = computeDistances(querySet, dataSet);
-        if (m_outFile.empty())
+        csv::util::Table<TValueType> dataSet;
+        if (m_pMPIWrapper->isMain())
         {
-            displayResult(distancesMatrix);
+            auto[loadedQuerySet, loadedDataSet] = loadCSVFiles();
+            m_pMPIWrapper->distributeTask(loadedQuerySet, loadedDataSet);
+            dataSet = std::move(loadedDataSet);
         }
-        else
+
+        auto querySet = m_pMPIWrapper->receiveQuery();
+        if (!m_pMPIWrapper->isMain())
         {
-            writeCSV(distancesMatrix);
+            dataSet = m_pMPIWrapper->receiveDataSet();
+        }
+
+        auto distancesMatrix = computeDistances(querySet, dataSet);
+
+        m_pMPIWrapper->sendDistanceMatrix(distancesMatrix);
+
+        if (m_pMPIWrapper->isMain())
+        {
+            auto fullDistancesMatrix = m_pMPIWrapper->receiveDistanceMatrix();
+            if (m_outFile.empty())
+            {
+                displayResult(fullDistancesMatrix);
+            } else
+            {
+                writeCSV(fullDistancesMatrix);
+            }
         }
 
         io::Msg::Write("The distance computing completed successfully.");
@@ -185,11 +210,13 @@ void MainApplication::showSummary() const
 
     std::stringstream ss;
     ss << std::endl;
-    ss << "The query path:       " << pathOrMassage(m_queryCSVFile) << std::endl;
-    ss << "The data set path:    " << pathOrMassage(m_dataSetCSVFile) << std::endl;
-    ss << "The output path:      " << m_outFile << std::endl;
-    ss << "The math metric type: " << m_strMetric << std::endl;
-    ss << "Execute parallel:     " << std::boolalpha << m_executeParallel << std::endl;
+    ss << "The query path:                      " << pathOrMassage(m_queryCSVFile) << std::endl;
+    ss << "The data set path:                   " << pathOrMassage(m_dataSetCSVFile) << std::endl;
+    ss << "The output path:                     " << m_outFile << std::endl;
+    ss << "The math metric type:                " << m_strMetric << std::endl;
+    ss << "Execute parallel:                    " << std::boolalpha << m_executeParallel << std::endl;
+    ss << "Running in the multi-process flow:   " << m_pMPIWrapper->isMPF() << std::endl;
+    ss << "The available processes:             " << m_pMPIWrapper->numOfProcessor() << std::endl;
     io::Msg::Write(ss.str().c_str());
 }
 

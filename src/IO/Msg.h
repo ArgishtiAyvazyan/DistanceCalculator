@@ -29,7 +29,7 @@ enum class MsgType : char
  */
 class Msg
 {
-
+    static inline bool s_messagesDisabled = false;
     static constexpr int s_iIndentLevel = 25;
     static constexpr std::string_view logFileName = "msg.log";
 public:
@@ -42,6 +42,15 @@ public:
      */
     static void Write(std::string_view message, MsgType eMessageType = MsgType::Info);
 
+
+    /**
+     * @brief           Disables the Msg::Write function.
+     * @param disable   If true disables, otherwise enables.
+     */
+    static void DisableMessages(const bool disable) noexcept
+    {
+        s_messagesDisabled = disable;
+    }
 private:
 };
 

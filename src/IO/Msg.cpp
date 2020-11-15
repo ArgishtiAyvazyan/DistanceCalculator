@@ -42,6 +42,11 @@ static int toColor(MsgType type)
 
 void Msg::Write(std::string_view svMessage, MsgType eMessageType)
 {
+    if (s_messagesDisabled)
+    {
+        return;
+    }
+
     static const std::map<MsgType, std::string_view> s_mapMessageTypeName
         {
                 std::make_pair(MsgType::Info, "Info")
