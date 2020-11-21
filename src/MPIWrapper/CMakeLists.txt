@@ -7,9 +7,14 @@ target_include_directories(MPIWrapperLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    # TODO Fix the MPI problem on MSVC.
     set(MPI_INCLUDE_PATH "C:/Program Files (x86)/Microsoft SDKs/MPI/Include/")
-    set(MPI_LIBRARIES "C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x86/msmpi.lib")
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        # 64 bits
+        set(MPI_LIBRARIES "C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib")
+    elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        # 32 bits
+        set(MPI_LIBRARIES "C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x86/msmpi.lib")
+endif()
 
     include_directories(${MPI_INCLUDE_PATH})
     set(CMAKE_C_FLAGS "${CMAKE_FLAGS} ${MPI_FLAGS}")
