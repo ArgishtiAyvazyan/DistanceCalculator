@@ -24,21 +24,21 @@ namespace
  * @tparam T    The c++ type.
  */
 template <typename T> struct MPIType;
-template <> struct MPIType <char>               { static constexpr auto value = MPI_CHAR; };
-template <> struct MPIType <signed char>        { static constexpr auto value = MPI_SIGNED_CHAR; };
-template <> struct MPIType <unsigned char>      { static constexpr auto value = MPI_UNSIGNED_CHAR; };
-template <> struct MPIType <wchar_t>            { static constexpr auto value = MPI_WCHAR; };
-template <> struct MPIType <short>              { static constexpr auto value = MPI_SHORT; };
-template <> struct MPIType <unsigned short>     { static constexpr auto value = MPI_UNSIGNED_SHORT; };
-template <> struct MPIType <int>                { static constexpr auto value = MPI_INT; };
-template <> struct MPIType <unsigned>           { static constexpr auto value = MPI_UNSIGNED; };
-template <> struct MPIType <long>               { static constexpr auto value = MPI_LONG; };
-template <> struct MPIType <unsigned long>      { static constexpr auto value = MPI_UNSIGNED_LONG; };
-template <> struct MPIType <float>              { static constexpr auto value = MPI_FLOAT; };
-template <> struct MPIType <double>             { static constexpr auto value = MPI_DOUBLE; };
-template <> struct MPIType <long double>        { static constexpr auto value = MPI_LONG_DOUBLE; };
-template <> struct MPIType <long long int>      { static constexpr auto value = MPI_LONG_LONG_INT; };
-template <> struct MPIType <unsigned long long> { static constexpr auto value = MPI_UNSIGNED_LONG_LONG; };
+template <> struct MPIType <char>               { [[maybe_unused]] static constexpr auto value = MPI_CHAR; };
+template <> struct MPIType <signed char>        { [[maybe_unused]] static constexpr auto value = MPI_SIGNED_CHAR; };
+template <> struct MPIType <unsigned char>      { [[maybe_unused]] static constexpr auto value = MPI_UNSIGNED_CHAR; };
+template <> struct MPIType <wchar_t>            { [[maybe_unused]] static constexpr auto value = MPI_WCHAR; };
+template <> struct MPIType <short>              { [[maybe_unused]] static constexpr auto value = MPI_SHORT; };
+template <> struct MPIType <unsigned short>     { [[maybe_unused]] static constexpr auto value = MPI_UNSIGNED_SHORT; };
+template <> struct MPIType <int>                { [[maybe_unused]] static constexpr auto value = MPI_INT; };
+template <> struct MPIType <unsigned>           { [[maybe_unused]] static constexpr auto value = MPI_UNSIGNED; };
+template <> struct MPIType <long>               { [[maybe_unused]] static constexpr auto value = MPI_LONG; };
+template <> struct MPIType <unsigned long>      { [[maybe_unused]] static constexpr auto value = MPI_UNSIGNED_LONG; };
+template <> struct MPIType <float>              { [[maybe_unused]] static constexpr auto value = MPI_FLOAT; };
+template <> struct MPIType <double>             { [[maybe_unused]] static constexpr auto value = MPI_DOUBLE; };
+template <> struct MPIType <long double>        { [[maybe_unused]] static constexpr auto value = MPI_LONG_DOUBLE; };
+template <> struct MPIType <long long int>      { [[maybe_unused]] static constexpr auto value = MPI_LONG_LONG_INT; };
+template <> struct MPIType <unsigned long long> { [[maybe_unused]] static constexpr auto value = MPI_UNSIGNED_LONG_LONG; };
 } // unnamed namespace
 
 
@@ -104,7 +104,7 @@ namespace util
     template <typename T>
     std::vector<T> receive(const int size , const int source, const int tag)
     {
-        std::vector <T> res (size);
+        std::vector <T> res (static_cast<size_t>(size));
         MPI_Recv(res.data(), size, MPIType<T>::value, source, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         return res;
     }
@@ -176,7 +176,8 @@ int MPIWrapper::registerVariable(std::string&& varName)
     const auto search = m_mapVarNameToID.find(varName);
     if (search == m_mapVarNameToID.end())
     {
-        m_mapVarNameToID.emplace(std::move(varName), uniqueVarID++);
+        const auto [nameToIDPair, _] = m_mapVarNameToID.emplace(std::move(varName), uniqueVarID++);
+        return nameToIDPair->second;
     }
     return search->second;
 }
@@ -241,7 +242,7 @@ MPIWrapper::TTable MPIWrapper::receiveQuery()
     auto blockStart = std::begin(flatMatrix);
     for (size_t i = 0; i < blockSize; ++i)
     {
-        auto blockEnd = blockStart + m_vectorSize.value();
+        auto blockEnd = blockStart + static_cast<TDifferenceType>(m_vectorSize.value());
         query[i].insert(query[i].end(), blockStart, blockEnd);
         blockStart = blockEnd;
     }
@@ -268,7 +269,7 @@ MPIWrapper::TTable MPIWrapper::receiveDataSet()
     auto blockStart = std::begin(flatMatrix);
     for (size_t i = 0; i < m_dataSetSize.value(); ++i)
     {
-        auto blockEnd = blockStart + m_vectorSize.value();
+        auto blockEnd = blockStart + static_cast<TDifferenceType>(m_vectorSize.value());
         dataSet[i].insert(dataSet[i].end(), blockStart, blockEnd);
         blockStart = blockEnd;
     }
@@ -339,7 +340,7 @@ auto MPIWrapper::splitFlatMatrix(const std::vector<TValueType>& flatMatrix, cons
     auto blockStart = std::begin(flatMatrix);
     for (size_t i = 0; i < matrixSize; ++i)
     {
-        auto blockEnd = blockStart + rowSize;
+        auto blockEnd = blockStart + static_cast<TDifferenceType>(rowSize);
         matrix[i].insert(matrix[i].end(), blockStart, blockEnd);
         blockStart = blockEnd;
     }

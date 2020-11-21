@@ -26,6 +26,7 @@ class MPIWrapper
 {
     using TValueType = float;
     using TTable = std::vector<std::vector<TValueType>>;
+    using TDifferenceType = std::iterator_traits<std::vector<TValueType>::iterator>::difference_type;
 
 
     static constexpr int mainPID = 0;
