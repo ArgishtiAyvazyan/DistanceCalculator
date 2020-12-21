@@ -60,7 +60,7 @@ namespace util
     template <typename T>
     void send (const T& data, const int target, const int tag)
     {
-        MPI_Send(&data, 1, MPIType<T>::value, target, tag, MPI_COMM_WORLD);
+        MPI_Rsend(&data, 1, MPIType<T>::value, target, tag, MPI_COMM_WORLD);
     }
 
     /**
@@ -74,7 +74,7 @@ namespace util
     template <typename T>
     void send (const std::vector<T>& data, const int target, const int tag)
     {
-        MPI_Send(data.data(), static_cast<int>(std::size(data)), MPIType<T>::value, target, tag, MPI_COMM_WORLD);
+        MPI_Rsend(data.data(), static_cast<int>(std::size(data)), MPIType<T>::value, target, tag, MPI_COMM_WORLD);
     }
 
     /**
