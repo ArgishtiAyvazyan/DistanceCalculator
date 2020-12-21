@@ -77,4 +77,4 @@ Option | Description
 
 ## License
 
-The project assumes the implementation of a distance calculator tool, designed to calculate distances between big numerical vectors.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
